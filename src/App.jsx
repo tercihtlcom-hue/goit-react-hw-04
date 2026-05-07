@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import toast, { Toaster } from 'react-hot-toast'; // Toaster eklemeyi unutma kanka
+import toast, { Toaster } from 'react-hot-toast';
 import fetchImages from './unsplash-api.js';
 import SearchBar from './components/SearchBar/SearchBar.jsx';
 import ImageGallery from './components/ImageGallery/ImageGallery.jsx';
@@ -21,7 +21,7 @@ function App() {
   const handleSearch = (newQuery) => {
     if (newQuery === query) return;
     setQuery(newQuery);
-    setImages([]); // Yeni aramada listeyi hemen boşaltıyoruz
+    setImages([]);
     setPage(1); 
   };
 
@@ -34,8 +34,6 @@ function App() {
         setError(false);
         const data = await fetchImages(query, page);
 
-        // Kanka burası çok kritik: 
-        // Eğer sayfa 1 ise gelenleri direkt set et, değilse üstüne ekle.
         setImages((prevImages) => 
           page === 1 ? data.results : [...prevImages, ...data.results]
         );
@@ -68,7 +66,6 @@ function App() {
 
   return (
     <div>
-      {/* Toast mesajlarının ekranda görünmesi için Toaster bileşenini ekledim */}
       <Toaster position="top-right" />
       
       <SearchBar onSubmit={handleSearch} />
@@ -81,7 +78,6 @@ function App() {
 
       {isLoading && <Loader />}
 
-      {/* Sayfa sonu kontrolü ve yükleme durumu */}
       {images.length > 0 && !isLoading && page < totalPages && (
         <LoadMoreBtn onClick={() => setPage((prevPage) => prevPage + 1)} />
       )}
